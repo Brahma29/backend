@@ -1,9 +1,11 @@
 import express from 'express';
-import { register, getAllResidents, getResidentById, updateResidentById, deleteResidentById } from '../controllers/residentController.js';
+import { register, getAllResidents, getResidentById, updateResidentById, deleteResidentById, login } from '../controllers/residentController.js';
+import { authenticateToken } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.route('/').post(register).get(getAllResidents);
-router.route('/:id').get(getResidentById).put(updateResidentById).delete(deleteResidentById);
+router.route('/').post(register).get(authenticateToken, getAllResidents);
+router.post('/login', login);
+router.route('/:id').get(authenticateToken, getResidentById).put(authenticateToken, updateResidentById).delete(authenticateToken, deleteResidentById);
 
 export default router;
